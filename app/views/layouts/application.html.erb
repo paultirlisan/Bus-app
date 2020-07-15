@@ -11,6 +11,7 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag Ckeditor.cdn_url %>
   </head>
 
   <body>
@@ -28,6 +29,15 @@
           </li>
 
           <% if current_user %>
+            <% if current_user.has_company? %>
+              <li class="nav-item">
+                <%= link_to "Settings", edit_user_registration_path, class: "nav-link" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "My profile", edit_user_registration_path, class: "nav-link" %>
+              </li>
+            <% end %>
             <li class="nav-item">
               <%= link_to "Sign Out", destroy_user_session_path, 
                   method: :delete, class: "nav-link" %>
@@ -43,6 +53,7 @@
         </ul>
       </div>
     </nav>
+
     <br>
     
     <%= yield %>

@@ -28,16 +28,37 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
     </div>
     
-    <%= f.fields_for :company do |company_fields| %>
-      <div class="checkbox form-inline">
-          <%= company_fields.check_box :active, class: "form-control",
-             "data-toggle": "collapse", "data-target": "#company_fields" %>&nbsp
-          <%= company_fields.label :active, "This account represents a company" %>
-      </div>
-      <div class="collapse" id="company_fields">
-        <button>Click</button>
-      </div>
-    <% end %>
+    <div class="checkbox form-inline">
+        <%= check_box_tag :active, "", false, class: "form-control",
+           "data-toggle": "collapse", "data-target": "#company_fields" %>&nbsp
+        <%= label_tag :active, "This account represents a company" %>
+    </div>
+
+    <div class="collapse" id="company_fields">
+      <br>
+      
+      <%= f.fields_for f.object.build_company do |company_fields| %>
+        <div class="field form-group">
+          <%= company_fields.label :phone %>
+          <%= company_fields.text_field :phone, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= company_fields.label :headquarters %>
+          <%= company_fields.text_field :headquarters, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= company_fields.label :description %>
+          <%= company_fields.cktext_area :description, class: "form-control" %>
+        </div>
+
+        <div class="field form-group">
+          <%= company_fields.label :careers_advertisement %>
+          <%= company_fields.cktext_area :careers_advertisement, class: "form-control" %>
+        </div>
+      <% end %>
+    </div>
 
     <br>
 
