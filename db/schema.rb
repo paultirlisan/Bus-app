@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_15_065254) do
+ActiveRecord::Schema.define(version: 2020_07_16_070559) do
 
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string "data_file_name", null: false
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 2020_07_15_065254) do
     t.text "careers_advertisement"
     t.boolean "active", default: true
     t.index ["user_id"], name: "index_companies_on_user_id"
+  end
+
+  create_table "stations", force: :cascade do |t|
+    t.integer "company_id"
+    t.string "name"
+    t.string "city"
+    t.index ["city"], name: "index_stations_on_city"
+    t.index ["company_id"], name: "index_stations_on_company_id"
   end
 
   create_table "users", force: :cascade do |t|

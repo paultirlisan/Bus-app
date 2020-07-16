@@ -1,0 +1,63 @@
+<div class="container">
+  <center>
+    <h1>Manage stations</h1>
+  </center>
+  <br>
+
+  <button data-toggle="collapse" data-target="#new_station_form" class="btn btn-outline-secondary">
+    Create a new station
+  </button>
+
+  <br><br>
+
+  <div id="new_station_form" class="collapse">
+    <%= form_for(@station) do |f| %>
+      <%= render 'shared/custom_error_messages', object: f.object %>
+
+      <div class="field form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control" %>
+      </div>
+
+      <% cities = CS.states(:ro).keys.flat_map { |state| CS.cities(state, :ro) } %>
+      <% cities.sort! %>
+      <div class="field form-group">
+        <%= f.label :city %>&nbsp
+        <%= f.select :city, options_for_select(cities), 
+            autocomplete: "city", class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Create new station", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+    <br>
+  </div>
+
+  <hr>
+
+  <% if current_user.company.stations.count > 0 %>
+    <h4>All stations</h4>
+    <br>
+    <% current_user.company.stations.each do |station| %>
+      <% if station.valid? %>
+        <div class="container pt-3 pb-3 bg-light">
+          <div class="row">
+            <div class="col-4 text-left"><%= "#{station.city} #{station.name}" %></div>
+            <div class="col-4 text-center">
+              <%= link_to "Edit", edit_station_path(station), class: "btn btn-primary" %>
+            </div>
+            <div class="col-4 text-right">
+              <%= link_to "Delete", station, method: :delete, class: "btn btn-danger",
+                  data: { confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        </div>
+        <br>
+      <% end %>
+    <% end %>
+  <% else %>
+    <h4>No stations yet.</h4>
+  <% end %>
+
+</div>

@@ -1,0 +1,32 @@
+<div class="container">
+  <center>
+    <h1>Manage stations</h1>
+  </center>
+  <br>
+
+  <br><br>
+
+  <div id="edit_station_form">
+    <%= form_for(@station) do |f| %>
+      <%= render 'shared/custom_error_messages', object: f.object %>
+
+      <div class="field form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "form-control" %>
+      </div>
+
+      <% cities = CS.states(:ro).keys.flat_map { |state| CS.cities(state, :ro) } %>
+      <% cities.sort! %>
+      <div class="field form-group">
+        <%= f.label :city %>&nbsp
+        <%= f.select :city, options_for_select(cities, f.object.city), 
+            autocomplete: "city", class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Update", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+    <br>
+  </div>
+</div>

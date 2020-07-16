@@ -12,27 +12,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
    def create
       super
-=begin
-      if params[:active]
-        user = User.find_by_email(params[:user][:email])
-        if !user.nil?
-          company = user.build_company(description: params[:description], 
-                                       phone: params[:phone],
-                                       headquarters: params[:headquarters],
-                                       careers_advertisement: params[:careers_advertisement])
-          if !company.save
-            user.destroy
-          end
-        end
-      end
-=end
       user = User.find_by_email(params[:user][:email])
       if !user.nil? && params[:active]
-        @company = user.build_company(description: params[:user][:company][:description], 
-                                      phone: params[:user][:company][:phone],
-                                      headquarters: params[:user][:company][:headquarters],
-                                      careers_advertisement: params[:user][:company][:careers_advertisement])
-        @company.save
+        company = user.build_company(description: params[:user][:company][:description], 
+                              phone: params[:user][:company][:phone],
+                              headquarters: params[:user][:company][:headquarters],
+                              careers_advertisement: params[:user][:company][:careers_advertisement])
+        company.save
       end
    end
 
@@ -61,6 +47,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   protected
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
    def configure_sign_up_params

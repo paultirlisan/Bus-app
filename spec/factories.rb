@@ -5,14 +5,4 @@ FactoryGirl.define do
 		password "password"
 		password_confirmation "password"
 	end
-
-=begin
-	factory :company do
-		user_id FactoryGirl.create(:user).id
-		description "Nice"
-		phone "0740123456"
-		headquarters "Bucuresti"
-		careers_advertisement "None."
-	end
-=end
 end

@@ -33,13 +33,23 @@
               <li class="nav-item">
                 <%= link_to "Settings", edit_user_registration_path, class: "nav-link" %>
               </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" 
+                      href="#" id="navbardrop" data-toggle="dropdown">
+                  Manage
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="<%= new_station_path %>">Stations</a>
+                  <a class="dropdown-item" href="#">Routes</a>
+                </div>
+              </li>
             <% else %>
               <li class="nav-item">
                 <%= link_to "My profile", edit_user_registration_path, class: "nav-link" %>
               </li>
             <% end %>
             <li class="nav-item">
-              <%= link_to "Sign Out", destroy_user_session_path, 
+              <%= link_to "Sign out", destroy_user_session_path, 
                   method: :delete, class: "nav-link" %>
             </li>
           <% else %>
@@ -55,6 +65,10 @@
     </nav>
 
     <br>
+
+    <div class="container">
+      <%= render 'shared/flash_messages' %>
+    </div>
     
     <%= yield %>
   </body>
