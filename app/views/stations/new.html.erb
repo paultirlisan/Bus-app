@@ -10,9 +10,10 @@
 
   <br><br>
 
+  <%= render 'shared/custom_error_messages', object: @station %>
+
   <div id="new_station_form" class="collapse">
     <%= form_for(@station) do |f| %>
-      <%= render 'shared/custom_error_messages', object: f.object %>
 
       <div class="field form-group">
         <%= f.label :name %>
@@ -43,11 +44,10 @@
       <% if station.valid? %>
         <div class="container pt-3 pb-3 bg-light">
           <div class="row">
-            <div class="col-4 text-left"><%= "#{station.city} #{station.name}" %></div>
-            <div class="col-4 text-center">
+            <div class="col-6 text-left"><%= "#{station.city} #{station.name}" %></div>
+            <div class="col-6 text-right">
               <%= link_to "Edit", edit_station_path(station), class: "btn btn-primary" %>
-            </div>
-            <div class="col-4 text-right">
+              &nbsp
               <%= link_to "Delete", station, method: :delete, class: "btn btn-danger",
                   data: { confirm: "Are you sure?" } %>
             </div>

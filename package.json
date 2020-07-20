@@ -6,6 +6,12 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
+    "bootstrap": "^4.5.0",
+    "jquery": "^3.5.1",
+    "moment": "^2.27.0",
+    "ngx-tempusdominus-bootstrap": "^1.0.1",
+    "tempusdominus-bootstrap-4": "^5.1.2",
+    "tempusdominus-core": "^5.0.3",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

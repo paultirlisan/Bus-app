@@ -1,0 +1,121 @@
+<div class="container">
+  <center>
+    <h1>Manage routes</h1>
+  </center>
+  <br>
+
+  <button data-toggle="collapse" data-target="#new_route_form" class="btn btn-outline-secondary">
+    Create a new route
+  </button>
+
+  <br><br>
+
+  <%= render 'shared/custom_error_messages', object: @route %>
+
+  <div id="new_route_form" class="collapse">
+    <%= form_for(@route) do |f| %>
+      <% stations = current_user.company.stations.map { |station| 
+      		"#{station.name}, #{station.city}" } %>
+
+      <div class="field form-group">
+        <%= f.label :departure_station %>&nbsp
+        <%= f.select :departure_station, 
+        	options_for_select(stations), class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :arrival_station %>&nbsp
+        <%= f.select :arrival_station, 
+        	options_for_select(stations), class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autocomplete: "name", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :duration, "Duration (in minutes)" %>
+        <%= f.number_field :duration, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :distance, "Distance (in km)" %>
+        <%= f.number_field :distance, step: :any, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :start_date %>
+        <%= f.datetime_select :start_date, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :end_date %>
+        <%= f.datetime_select :end_date, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :period %>&nbsp
+        <%= f.select :period, options_for_select(["Daily", "Weekly", "Monthly", "Yearly"]), 
+            autocomplete: "period", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+      	<%= f.label :price %>
+      	<%= f.number_field :price, step: :any, class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+      	<%= f.label :capacity %>
+      	<%= f.number_field :capacity, class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Create new route", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+    <br>
+  </div>
+
+  <hr>
+
+  <% if current_user.company.routes.count > 0 %>
+    <h4>All routes</h4>
+    <br>
+    <% current_user.company.routes.each do |route| %>
+      <% if !route.nil? && route.valid? %>
+        <div class="container pt-3 pb-3 bg-light">
+          <div class="row pb-3">
+            <div class="col-4 text-left"></div>
+            <div class="col-4 text-center"><%= current_user.name %></div>
+            <div class="col-4 text-right"><%= route.name %></div>
+          </div>
+          <div class="row pb-3">
+            <div class="col-4 text-left"><%= route.departure_station.city %></div>
+            <div class="col-4 text-center"><%= "#{route.distance} km" %></div>
+            <div class="col-4 text-right"><%= route.arrival_station.city %></div>
+          </div>
+          <div class="row">
+            <div class="col-4 text-left">
+              <h5>
+                <strong><%= route.start_date.strftime("%B %d, %Y %H:%M") %></strong>
+              </h5>
+            </div>
+            <div class="col-4 text-center">
+              <button class="btn btn-info" data-toggle="collapse" data-target="#">Details</button>
+            </div>
+            <div class="col-4 text-right">
+              <h5>
+                <strong><%= route.end_date.strftime("%B %d, %Y %H:%M") %></strong>
+              </h5>
+            </div>
+          </div>
+        </div>
+        <br>
+      <% end %>
+    <% end %>
+  <% else %>
+    <h4>No routes yet.</h4>
+  <% end %>
+
+</div>

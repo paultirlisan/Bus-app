@@ -8,5 +8,6 @@ class CreateStations < ActiveRecord::Migration[6.0]
 
     add_index :stations, :company_id
     add_index :stations, :city
+    add_index :stations, [:company_id, :name, :city], unique: true
   end
 end

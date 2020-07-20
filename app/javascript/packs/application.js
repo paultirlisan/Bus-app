@@ -20,3 +20,5 @@ require("channels")
 //= require popper
 //= require bootstrap
 //= require ckeditor/init
+//= require moment
+//= require tempusdominus-bootstrap-4.js
