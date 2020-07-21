@@ -1,2 +1,76 @@
-<h1>Routes#edit</h1>
-<p>Find me in app/views/routes/edit.html.erb</p>
+<div class="container">
+  <center>
+    <h1>Manage routes</h1>
+  </center>
+  <br>
+
+  <br><br>
+
+  <div id="edit_route_form">
+    <%= form_for(@route) do |f| %>
+      <%= render 'shared/custom_error_messages', object: f.object %>
+      <% stations = current_user.company.stations.map { |station| 
+      		"#{station.name}, #{station.city}" } %>
+
+      <div class="field form-group">
+        <%= f.label :departure_station %>&nbsp
+        <%= f.select :departure_station, 
+        	options_for_select(stations, "#{@route.departure_station.name}, #{@route.departure_station.city}"), class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :arrival_station %>&nbsp
+        <%= f.select :arrival_station, 
+        	options_for_select(stations, "#{@route.arrival_station.name}, #{@route.arrival_station.city}"), class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, autocomplete: "name", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :duration, "Duration (in minutes)" %>
+        <%= f.number_field :duration, autocomplete: "duration", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :distance, "Distance (in km)" %>
+        <%= f.number_field :distance, step: :any, autocomplete: "distance", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :start_date %>
+        <%= f.datetime_select :start_date, autocomplete: "start_date", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :end_date %>
+        <%= f.datetime_select :end_date, autocomplete: "end_date", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+        <%= f.label :period %>&nbsp
+        <%= f.select :period, options_for_select(["Daily", "Weekly", "Monthly", "Yearly"]), 
+            autocomplete: "period", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+      	<%= f.label :price %>
+      	<%= f.number_field :price, step: :any, autocomplete: "price", class: "form-control" %>
+      </div>
+
+      <div class="field form-group">
+      	<%= f.label :capacity %>
+      	<%= f.number_field :capacity, autocomplete: "capacity", class: "form-control" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Update", class: "btn btn-primary" %>
+        &nbsp
+        <%= link_to "Cancel", new_route_path %>
+      </div>
+    <% end %>
+    <br>
+  </div>
+</div>

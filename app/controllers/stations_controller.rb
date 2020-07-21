@@ -29,7 +29,9 @@ class StationsController < ApplicationController
 	end
 
 	def destroy
-		@station.destroy
+		if @station.destroy
+			flash.now[:info] = "The station has been deleted"
+		end
 		render 'new'
 	end
 

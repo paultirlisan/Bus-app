@@ -37,4 +37,17 @@ class Route < ApplicationRecord
 	validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
 	validates :capacity, presence: true, numericality: { only_integer: true,
 													greater_than: 0 }
+
+	def time_by_repetition(date)
+		case period
+		when "Daily"
+			"Everyday #{date.strftime('%H:%M')}"
+		when "Weekly"
+			"Every #{date.strftime('%A %H:%M')}"
+		when "Monthly"
+			"Every #{date.day} of the month, #{date.strftime('%H:%M')}"
+		when "Yearly"
+			"Every #{date.strftime('%B %d of the year %H:%M')}"
+		end
+	end
 end

@@ -1,1 +1,59 @@
-<h1>Hello World!</h1>
+<br>
+<div class="container-fluid">
+	<div class="bg-primary pt-5 pb-5 text-center text-white">
+		<h2>Select your next journey</h2>
+	</div>
+	<div class="bg-warning">
+		<form method="get" action="<%= root_path %>">
+			<div class="row pt-3 pl-3 pr-3">
+				<% cities = Station.select("DISTINCT city").map(&:city) %>
+				<div class="col-md-2 form-group">
+					<%= select_tag :departure_city, options_for_select(cities, params[:departure_city]), class: "form-control", prompt: "Travel from" %>
+				</div>
+				<div class="col-md-2 form-group">
+					<%= select_tag :arrival_city, options_for_select(cities, params[:arrival_city]),
+					 class: "form-control", prompt: "Travel to" %>
+				</div>
+				<div class="col-md-2 form-group">
+					<input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" 
+					type="text" value="<%= @date.strftime('%m/%d/%Y') if !@date.nil? %>" />
+				</div>
+				<div class="col-md-2 form-group">
+					<%= select_tag :company, options_for_select(Company.all.map do |company| 
+						company.user.name
+						end), class: "form-control", prompt: "All companies" %>
+				</div>
+				<div class="col-md-2 form-group">
+					<%= select_tag :price, options_for_select(["0 - 10", "11 - 20", 
+						"20 - 50", "50 - 100", "Over 100"]), class: "form-control",
+								prompt: "Price range" %>
+				</div>
+				<div class="col-md-2 form-group">
+					<%= submit_tag "Search", class: "btn btn-primary btn-block" %>
+				</div>
+			</div>
+		</form>
+	</div>  
+</div>
+
+<br>
+
+<% if @show_for_now %>
+<% @show_for_now.each do |key, value| %>
+<%= "#{key}: #{value}" %><br>
+<% end %>
+<% end %>
+
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options = {
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+</script>

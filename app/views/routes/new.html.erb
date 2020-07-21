@@ -95,19 +95,51 @@
             <div class="col-4 text-center"><%= "#{route.distance} km" %></div>
             <div class="col-4 text-right"><%= route.arrival_station.city %></div>
           </div>
-          <div class="row">
+          <div class="row pb-3">
             <div class="col-4 text-left">
               <h5>
-                <strong><%= route.start_date.strftime("%B %d, %Y %H:%M") %></strong>
+                <strong><%= route.time_by_repetition(route.start_date) %></strong>
               </h5>
             </div>
             <div class="col-4 text-center">
-              <button class="btn btn-info" data-toggle="collapse" data-target="#">Details</button>
+              <button class="btn btn-info" data-toggle="collapse" data-target="#details_route_<%= route.id %>">Details</button>
             </div>
             <div class="col-4 text-right">
               <h5>
-                <strong><%= route.end_date.strftime("%B %d, %Y %H:%M") %></strong>
+                <strong><%= route.time_by_repetition(route.start_date +
+                             route.duration.minutes) %></strong>
               </h5>
+            </div>
+          </div>
+          <div id="details_route_<%= route.id %>" class="collapse">
+            <div class="row pb-2">
+              <div class="col-6 text-left">
+                Departure: <%= "#{route.departure_station.name}, #{route.departure_station.city}" %>
+              </div>
+              <div class="col-6 text-right">
+                Arrival: <%= "#{route.arrival_station.name}, #{route.arrival_station.city}" %>
+              </div>
+            </div>
+            <div class="row pb-2">
+              <div class="col-4 text-left">
+                Available from: <%= "#{route.start_date.strftime('%B %d, %Y')}" %>
+              </div>
+              <div class="col-4 text-center">
+                <%= link_to "Edit", edit_route_path(route), class: "btn btn-primary" %>&nbsp
+                <%= link_to "Delete", route, method: :delete, class: "btn btn-danger",
+                      data: { confirm: "Are you sure?" } %>
+              </div>
+              <div class="col-4 text-right">
+                Available until: <%= "#{route.end_date.strftime('%B %d, %Y')}" %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 text-left">
+                <strong>Price: <%= route.price %> RON</strong>
+              </div>
+              <div class="col-6 text-right">
+                <strong>Capacity: <%= route.capacity %></strong>
+              </div>
             </div>
           </div>
         </div>
