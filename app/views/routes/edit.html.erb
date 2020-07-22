@@ -51,7 +51,8 @@
 
       <div class="field form-group">
         <%= f.label :period %>&nbsp
-        <%= f.select :period, options_for_select(["Daily", "Weekly", "Monthly", "Yearly"]), 
+        <%= f.select :period, 
+            options_for_select(["Daily", "Weekly", "Monthly", "Yearly"], "#{@route.period}"), 
             autocomplete: "period", class: "form-control" %>
       </div>
 

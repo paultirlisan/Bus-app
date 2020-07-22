@@ -17,4 +17,12 @@ class Station < ApplicationRecord
 		end
 		return nil
 	end
+
+	def self.find_by_city(city)
+		Station.where(city: city)
+	end
+
+	def self.find_by_city_company(city, company)
+		Station.where(city: city, company_id: company.id)
+	end
 end

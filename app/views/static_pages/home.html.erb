@@ -1,32 +1,34 @@
 <br>
-<div class="container-fluid">
+<div class="container">
 	<div class="bg-primary pt-5 pb-5 text-center text-white">
 		<h2>Select your next journey</h2>
 	</div>
 	<div class="bg-warning">
 		<form method="get" action="<%= root_path %>">
 			<div class="row pt-3 pl-3 pr-3">
-				<% cities = Station.select("DISTINCT city").map(&:city) %>
+				<% active_companies_ids = Company.where(active: true).ids
+					 cities = Station.where("company_id in (?)", 
+					 						active_companies_ids).select("DISTINCT city").map(&:city)  %>
 				<div class="col-md-2 form-group">
 					<%= select_tag :departure_city, options_for_select(cities, params[:departure_city]), class: "form-control", prompt: "Travel from" %>
 				</div>
 				<div class="col-md-2 form-group">
-					<%= select_tag :arrival_city, options_for_select(cities, params[:arrival_city]),
-					 class: "form-control", prompt: "Travel to" %>
+					<%= select_tag :arrival_city, options_for_select(cities, params[:arrival_city]), class: "form-control", prompt: "Travel to" %>
 				</div>
 				<div class="col-md-2 form-group">
 					<input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" 
 					type="text" value="<%= @date.strftime('%m/%d/%Y') if !@date.nil? %>" />
 				</div>
 				<div class="col-md-2 form-group">
-					<%= select_tag :company, options_for_select(Company.all.map do |company| 
-						company.user.name
-						end), class: "form-control", prompt: "All companies" %>
+					<%= select_tag :company, 
+						options_for_select(Company.where(active: true).map { |company| company.user.name },
+																params[:company]),
+						class: "form-control", prompt: "All companies" %>
 				</div>
 				<div class="col-md-2 form-group">
 					<%= select_tag :price, options_for_select(["0 - 10", "11 - 20", 
-						"20 - 50", "50 - 100", "Over 100"]), class: "form-control",
-								prompt: "Price range" %>
+						"21 - 50", "51 - 100", "Over 100"], params[:price]), class: "form-control",
+								prompt: "All prices" %>
 				</div>
 				<div class="col-md-2 form-group">
 					<%= submit_tag "Search", class: "btn btn-primary btn-block" %>
@@ -37,11 +39,28 @@
 </div>
 
 <br>
+<br>
 
-<% if @show_for_now %>
-<% @show_for_now.each do |key, value| %>
-<%= "#{key}: #{value}" %><br>
-<% end %>
+<% if !@routes.nil? && !@routes.empty? %>
+	<div class="container">
+		<h2>Available routes</h2>
+		<br>
+		<%= will_paginate @routes, renderer: BootstrapPagination::Rails %>
+	</div>
+	<% @routes.each do |route| %>
+		<% if !route.nil? && route.valid? %>
+      <%= render 'shared/route', route: route %>
+    <% end %>
+	<% end %>
+	<div class="container">
+		<%= will_paginate @routes, renderer: BootstrapPagination::Rails  %>
+	</div>
+<% else %>
+	<% if !@routes.nil? # the case when the search took place but no route has been found %>
+		<div class="container">
+			<h2>No routes have been found.</h2>
+	</div>
+	<% end %>
 <% end %>
 
 <script>

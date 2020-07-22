@@ -15,18 +15,25 @@
   <div id="new_route_form" class="collapse">
     <%= form_for(@route) do |f| %>
       <% stations = current_user.company.stations.map { |station| 
-      		"#{station.name}, #{station.city}" } %>
+      		"#{station.name}, #{station.city}" }
+         default_departure_station = params[:route].nil? ? 
+                                        "" : params[:route][:departure_station]
+         default_arrival_station = params[:route].nil? ? 
+                                      "" : params[:route][:arrival_station]
+         default_period = params[:route].nil? ? "" : params[:route][:period] %>
 
       <div class="field form-group">
         <%= f.label :departure_station %>&nbsp
         <%= f.select :departure_station, 
-        	options_for_select(stations), class: "form-control" %>
+        	options_for_select(stations, default_departure_station),
+          class: "form-control" %>
       </div>
 
       <div class="field form-group">
         <%= f.label :arrival_station %>&nbsp
         <%= f.select :arrival_station, 
-        	options_for_select(stations), class: "form-control" %>
+        	options_for_select(stations, default_arrival_station), 
+          class: "form-control" %>
       </div>
 
       <div class="field form-group">
@@ -56,8 +63,8 @@
 
       <div class="field form-group">
         <%= f.label :period %>&nbsp
-        <%= f.select :period, options_for_select(["Daily", "Weekly", "Monthly", "Yearly"]), 
-            autocomplete: "period", class: "form-control" %>
+        <%= f.select :period, options_for_select(["Daily", "Weekly", "Monthly", "Yearly"],
+              default_period), autocomplete: "period", class: "form-control" %>
       </div>
 
       <div class="field form-group">
@@ -80,9 +87,12 @@
   <hr>
 
   <% if current_user.company.routes.count > 0 %>
+    <% routes = current_user.company.routes.paginate(page: params[:page], per_page: 10) %>
     <h4>All routes</h4>
     <br>
-    <% current_user.company.routes.each do |route| %>
+    <%= will_paginate routes, renderer: BootstrapPagination::Rails %>
+    <br>
+    <% routes.each do |route| %>
       <% if !route.nil? && route.valid? %>
         <div class="container pt-3 pb-3 bg-light">
           <div class="row pb-3">
@@ -146,6 +156,7 @@
         <br>
       <% end %>
     <% end %>
+    <%= will_paginate routes, renderer: BootstrapPagination::Rails %>
   <% else %>
     <h4>No routes yet.</h4>
   <% end %>

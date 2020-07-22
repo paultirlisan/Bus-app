@@ -40,7 +40,9 @@
   <% if current_user.company.stations.count > 0 %>
     <h4>All stations</h4>
     <br>
-    <% current_user.company.stations.each do |station| %>
+    <% stations = current_user.company.stations.paginate(page: params[:page], per_page: 10) %>
+    <%= will_paginate stations, renderer: BootstrapPagination::Rails %>
+    <% stations.each do |station| %>
       <% if station.valid? %>
         <div class="container pt-3 pb-3 bg-light">
           <div class="row">
@@ -56,6 +58,7 @@
         <br>
       <% end %>
     <% end %>
+    <%= will_paginate stations, renderer: BootstrapPagination::Rails %>
   <% else %>
     <h4>No stations yet.</h4>
   <% end %>
