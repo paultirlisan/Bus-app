@@ -90,4 +90,27 @@ class Route < ApplicationRecord
 			route.is_available(date)
 		end
 	end
+
+	def self.search_routes_by_params(departure_city, arrival_city, date, company, price_range)
+		if company.nil?
+				departure_stations = Station.find_by_city(departure_city)
+				arrival_stations = Station.find_by_city(arrival_city)
+			else
+				departure_stations = Station.find_by_city_company(departure_city, company)
+				arrival_stations = Station.find_by_city_company(arrival_city, company)
+			end
+
+			@routes = []
+			departure_stations.each do |departure_station|
+				arrival_stations.each do |arrival_station|
+					# Filter by date
+					possible_routes = Route.find_by_stations_date(departure_station, 
+												arrival_station, date)
+					# Filter by price
+					possible_routes.filter! { |route| price_range.include?(route.price) }
+					@routes = @routes + possible_routes
+				end
+			end
+			return @routes
+	end
 end

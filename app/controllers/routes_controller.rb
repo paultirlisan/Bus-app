@@ -1,3 +1,6 @@
+require 'will_paginate'
+require 'will_paginate/active_record'
+
 class RoutesController < ApplicationController
   before_action :signed_in_company
   before_action :correct_company, only: [:edit, :update, :destroy]

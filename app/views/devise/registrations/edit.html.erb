@@ -32,11 +32,6 @@
             class: "form-control" %>
     </div>
 
-    <div class="field form-group">
-      <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
-      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
-    </div>
-
     <% if current_user.has_company? %>
       <%= f.fields_for :company do |company_fields| %>
         <div class="field form-group">
@@ -65,6 +60,11 @@
         </div>
       <% end %>
     <% end %>
+
+    <div class="field form-group">
+      <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "form-control" %>
+    </div>
 
     <div class="actions">
       <%= f.submit "Update", class: "btn btn-primary" %>

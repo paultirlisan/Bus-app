@@ -16,9 +16,6 @@
     <!--  jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-    <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
-    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
-
     <!-- Bootstrap Date-Picker Plugin -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
@@ -33,16 +30,49 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="<%= root_path %>">Home</a>
           </li>
+          <% if @companies_controller_active && (!current_user || 
+                    !current_user.has_company? || current_user.company.id.to_s != params[:id]) %>
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" 
+                    href="#" id="navbardrop_company" data-toggle="dropdown">
+                Company
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" 
+                    href="<%= company_path(Company.find_by_id(params[:id])) %>">Profile</a>
+                <a class="dropdown-item" 
+                    href="<%= contact_company_path(Company.find_by_id(params[:id])) %>">Contact</a>
+                <a class="dropdown-item"
+                    href="<%= careers_company_path(Company.find_by_id(params[:id])) %>">Careers</a>
+              </div>
+            </li>
 
+          <% end %>
+        </ul>
+        <ul class="navbar-nav ml-auto">
           <% if current_user %>
             <% if current_user.has_company? %>
-              <li class="nav-item">
-                <%= link_to "Settings", edit_user_registration_path, class: "nav-link" %>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"
+                      href="#" id="navbardrop_my_company" data-toggle="dropdown">
+                  My company
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" 
+                      href="<%= company_path(current_user.company) %>">Profile</a>
+                  <a class="dropdown-item" 
+                      href="<%= contact_company_path(current_user.company) %>">Contact</a>
+                  <a class="dropdown-item"
+                      href="<%= careers_company_path(current_user.company) %>">Careers</a>
+                </div>
               </li>
+
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" 
                       href="#" id="navbardrop" data-toggle="dropdown">
@@ -52,6 +82,9 @@
                   <a class="dropdown-item" href="<%= new_station_path %>">Stations</a>
                   <a class="dropdown-item" href="<%= new_route_path %>">Routes</a>
                 </div>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Settings", edit_user_registration_path, class: "nav-link" %>
               </li>
             <% else %>
               <li class="nav-item">

@@ -1,0 +1,21 @@
+<% if !routes.nil? && !routes.empty? %>
+	<div class="container">
+		<h2>Available routes</h2>
+		<br>
+		<%= will_paginate routes, renderer: BootstrapPagination::Rails %>
+	</div>
+	<% routes.each do |route| %>
+		<% if !route.nil? && route.valid? %>
+      <%= render 'shared/route', route: route %>
+    <% end %>
+	<% end %>
+	<div class="container">
+		<%= will_paginate routes, renderer: BootstrapPagination::Rails  %>
+	</div>
+<% else %>
+	<% if !routes.nil? # the case when the search took place but no route has been found %>
+		<div class="container">
+			<h2>No routes have been found.</h2>
+	</div>
+	<% end %>
+<% end %>
