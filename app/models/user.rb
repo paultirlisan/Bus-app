@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_one :company, dependent: :destroy
+  has_many :journeys, dependent: :destroy
   accepts_nested_attributes_for :company, allow_destroy: true, reject_if: :all_blank
 
   validates :name, presence: true, uniqueness: true

@@ -12,7 +12,7 @@
   <div class="row pb-3">
     <div class="col-4 text-left">
       <h5>
-        <strong><%= route.time_by_date(@date.dup.change(hour: route.start_date.hour, 
+        <strong><%= route.time_by_date(date.dup.change(hour: route.start_date.hour, 
         																		min: route.start_date.min)) %></strong>
       </h5>
     </div>
@@ -21,7 +21,7 @@
     </div>
     <div class="col-4 text-right">
       <h5>
-        <strong><%= route.time_by_date(@date.dup.change(hour: route.start_date.hour, 
+        <strong><%= route.time_by_date(date.dup.change(hour: route.start_date.hour, 
         								min: route.start_date.min) + route.duration.minutes) %></strong>
       </h5>
     </div>
@@ -42,13 +42,23 @@
         </div>
         <% if current_user.has_company? && current_user.company == route.company %>
           <div class="col-4 text-center">
-            <%= link_to "Edit", edit_route_path(route), class: "btn btn-primary" %>&nbsp
-            <%= link_to "Delete", route, method: :delete, class: "btn btn-danger",
+            <%= render 'shared/route_modal', route: route, date: date %>
+            <%= link_to "Edit", edit_route_path(route), class: "btn btn-outline-primary" %>
+            <%= link_to "Delete", route, method: :delete, class: "btn btn-outline-danger",
                   data: { confirm: "Are you sure?" } %>
           </div>
         <% else %>
           <div class="col-4 text-center">
-            <%= link_to "Buy ticket", "#", class: "btn btn-primary" %>
+            <% @journey = Journey.new %>
+            <%= form_for @journey do |f| %>
+              <%= f.hidden_field :route_id, value: route.id %>
+              <%= f.hidden_field :date, value: date %>
+              <% if route.number_of_available_places(date) > 0 %>
+                <%= f.submit "Buy ticket", class: "btn btn-primary" %>
+              <% else %>
+                <%= f.submit "Sold out", class: "btn btn-primary", disabled: true %>
+              <% end %>
+            <% end %>
           </div>
         <% end %>
         <div class="col-4 text-right pt-2">

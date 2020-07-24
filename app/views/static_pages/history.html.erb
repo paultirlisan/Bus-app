@@ -1,0 +1,12 @@
+<div class="container">
+	<h1>History of your journeys</h1>
+	<br>
+
+	<% if @journeys.count > 0 %>
+		<% @journeys.each do |journey| %>
+			<%= render 'shared/journey', journey: journey %>
+		<% end %>
+	<% else %>
+		You have not booked any tickets yet.
+	<% end %>
+</div>

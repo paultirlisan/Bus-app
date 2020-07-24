@@ -13,6 +13,7 @@ RSpec.describe User, type: :model do
 		it { should respond_to(:reset_password_token)}
 		it { should respond_to(:reset_password_sent_at) }
 		it { should respond_to(:company) }
+		it { should respond_to(:journeys) }
 
 		it { should be_valid(user) }
 	end

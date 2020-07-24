@@ -1,0 +1,36 @@
+<button type="button" class="btn btn-outline-secondary" data-toggle="modal" 
+          data-target="#modal-<%= route.id %>">All tickets</button>
+
+<div class="modal fade" id="modal-<%= route.id %>">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Route summary</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <ul>
+          <% users_tickets = route.select_users_tickets(date) %>
+          <% if users_tickets.count > 0 %>
+            <% users_tickets.each do |user_tickets| %>
+              <li class="text-left">
+                <%= User.find_by_id(user_tickets[0]).name %>: <%= pluralize(user_tickets[1], "ticket") %>
+              </li>
+            <% end %>
+          <% else %>
+            <p class="text-left">There are no tickets bought yet.</p>
+          <% end %>
+        </ul>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>

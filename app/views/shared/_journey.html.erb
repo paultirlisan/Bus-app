@@ -1,0 +1,29 @@
+<div class="container pt-3 pb-3 bg-light">
+	<div class="row">
+		<div class="col text-left">
+			<%= journey[0].date.strftime("%B %d, %Y") %>
+		</div>
+
+		<div class="col">
+			<%= journey[0].route.company.user.name %>
+		</div>
+
+		<div class="col">
+			<%= "#{journey[0].route.departure_station.name}, #{journey[0].route.departure_station.city}" %>
+		</div>
+
+		<div class="col">
+			<%= "#{journey[0].route.arrival_station.name}, #{journey[0].route.arrival_station.city}" %>
+		</div>
+
+		<div class="col text-center">
+			<%= pluralize(journey[1], "ticket") %>
+		</div>
+
+		<div class="col text-right">
+			<%= link_to "Delete", journey[0], method: :delete, class: "btn btn-outline-danger",
+					data: { confirm: "Are you sure?" } %>
+		</div>
+	</div>
+</div>
+<br>

@@ -21,6 +21,7 @@ class Route < ApplicationRecord
 	belongs_to :departure_station, class_name: "Station"
 	belongs_to :arrival_station, class_name: "Station"
 	belongs_to :company
+	has_many :journeys, dependent: :destroy
 
 	validates :departure_station_id, presence: true
 	validates :arrival_station_id, presence: true
@@ -73,6 +74,25 @@ class Route < ApplicationRecord
 		end
 	end
 
+	def number_of_available_places(date)
+		if !is_available(date)
+			return 0
+		end
+
+		occupied_places = Journey.select(:id).where(route_id: id, date: date).count
+		if occupied_places < capacity
+			return capacity - occupied_places
+		end
+
+		return 0
+	end
+
+	def select_users_tickets(date)
+		user_ids = Journey.select(:user_id).where(route_id: id, 
+									date: date).order("user_id ASC").map(&:user_id)
+		return user_ids.group_by { |user_id| user_id }.map { |user_id, vector| [user_id, vector.length] }
+	end
+
 	def self.find_by_stations_date(departure_station, arrival_station, date)
 		if departure_station.company != arrival_station.company
 			return []
@@ -93,24 +113,24 @@ class Route < ApplicationRecord
 
 	def self.search_routes_by_params(departure_city, arrival_city, date, company, price_range)
 		if company.nil?
-				departure_stations = Station.find_by_city(departure_city)
-				arrival_stations = Station.find_by_city(arrival_city)
-			else
-				departure_stations = Station.find_by_city_company(departure_city, company)
-				arrival_stations = Station.find_by_city_company(arrival_city, company)
-			end
+			departure_stations = Station.find_by_city(departure_city)
+			arrival_stations = Station.find_by_city(arrival_city)
+		else
+			departure_stations = Station.find_by_city_company(departure_city, company)
+			arrival_stations = Station.find_by_city_company(arrival_city, company)
+		end
 
-			@routes = []
-			departure_stations.each do |departure_station|
-				arrival_stations.each do |arrival_station|
-					# Filter by date
-					possible_routes = Route.find_by_stations_date(departure_station, 
-												arrival_station, date)
-					# Filter by price
-					possible_routes.filter! { |route| price_range.include?(route.price) }
-					@routes = @routes + possible_routes
-				end
+		@routes = []
+		departure_stations.each do |departure_station|
+			arrival_stations.each do |arrival_station|
+				# Filter by date
+				possible_routes = Route.find_by_stations_date(departure_station, 
+											arrival_station, date)
+				# Filter by price
+				possible_routes.filter! { |route| price_range.include?(route.price) }
+				@routes = @routes + possible_routes
 			end
-			return @routes
+		end
+		return @routes
 	end
 end

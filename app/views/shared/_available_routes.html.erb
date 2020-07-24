@@ -6,7 +6,7 @@
 	</div>
 	<% routes.each do |route| %>
 		<% if !route.nil? && route.valid? %>
-      <%= render 'shared/route', route: route %>
+      <%= render 'shared/route', route: route, date: date %>
     <% end %>
 	<% end %>
 	<div class="container">

@@ -136,8 +136,8 @@
                 Available from: <%= "#{route.start_date.strftime('%B %d, %Y')}" %>
               </div>
               <div class="col-4 text-center">
-                <%= link_to "Edit", edit_route_path(route), class: "btn btn-primary" %>&nbsp
-                <%= link_to "Delete", route, method: :delete, class: "btn btn-danger",
+                <%= link_to "Edit", edit_route_path(route), class: "btn btn-outline-primary" %>&nbsp
+                <%= link_to "Delete", route, method: :delete, class: "btn btn-outline-danger",
                       data: { confirm: "Are you sure?" } %>
               </div>
               <div class="col-4 text-right">

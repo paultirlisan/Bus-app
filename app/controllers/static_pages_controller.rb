@@ -3,6 +3,7 @@ require 'will_paginate'
 require 'will_paginate/active_record'
 
 class StaticPagesController < ApplicationController
+	before_action :authenticate_user!, only: :history
 
 	def home
 		@date = DateTime.now
@@ -16,5 +17,11 @@ class StaticPagesController < ApplicationController
 							@company, @price_range)
 			@routes = @routes.paginate(page: params[:page], per_page: 10)
 		end
+	end
+
+	def history
+		@journeys = current_user.journeys.group_by { |j| [j.user_id, j.route_id, j.date] }.
+						map {|identifier, vector| [vector.first, vector.length]}
+
 	end
 end
