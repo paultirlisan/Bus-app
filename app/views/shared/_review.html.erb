@@ -1,0 +1,24 @@
+<div class="container pt-3 pb-3 bg-light">
+	<div class="row">
+		<div class="col-lg-2 text-center">
+			<%= review.user.name %>
+			<br>
+			<% review.yellow_stars.times do %>
+				<i class="fa fa-star text-warning"></i>
+			<% end %>
+			<% review.blank_stars.times do %>
+				<i class="fa fa-star"></i>
+			<% end %>
+			<% if current_user && current_user == review.user %>
+				<br><br>
+				<%= link_to "Delete", company_review_path(review), method: :delete, class: "btn btn-outline-danger",
+						data: { confirm: "Are you sure?" } %>
+			<% end %>
+			<br><br>
+		</div>
+		<div class="col-lg-10">
+			<%= review.body %>
+		</div>
+	</div>
+</div>
+<hr>

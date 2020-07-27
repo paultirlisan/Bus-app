@@ -16,10 +16,7 @@
 	<div class="bg-warning">
 		<form method="get" action="<%= company_path @company %>">
 			<div class="row pt-3 pl-3 pr-3">
-
-				<% active_companies_ids = Company.where(active: true).ids %>
-				<% cities = Station.where("company_id in (?)", 
-					 						active_companies_ids).select("DISTINCT city").map(&:city)  %>
+				<% cities = @company.stations.select("DISTINCT city").map(&:city)  %>
 				<% cities.sort! %>
 
 				<div class="col-md form-group">
@@ -52,6 +49,50 @@
 <br>
 
 <%= render 'shared/available_routes', routes: @routes, date: @date %>
+
+<% if current_user && current_user != @company.user && 
+					@company.reviews.find_by_user_id(current_user.id).nil? %>
+	<div class="container">
+		<%= form_for [@company, @review] do |f| %>
+			<h2>Add a review</h2>
+			<br>
+			<%= render 'shared/custom_error_messages', object: f.object %>
+
+			<%= f.hidden_field :company_id, value: @company.id %>
+
+			<div class="form-group">
+				<%= f.label :rating %>&nbsp&nbsp
+				<%= f.select :rating, options_for_select([0, 1, 2, 3, 4, 5], 0), class: "form-control" %>
+			</div>
+
+			<div class="form-group">
+				<%= f.label :body, "Content" %>
+				<%= f.text_area :body, class: "form-control" %>
+			</div>
+
+			<div class="actions">
+				<%= f.submit "Submit review", class: "btn btn-primary" %>
+			</div>
+		<% end %>
+		<hr>
+	</div>
+<% end %>
+
+<br>
+
+<div class="container">
+	<% if @reviews.count > 0 %>
+		<h2>Reviews (<%= @reviews.count %>)</h2>
+		<hr>
+		<% @reviews.each do |review| %>
+			<% if !review.nil? && review.valid? %>
+				<%= render 'shared/review', review: review %>
+			<% end %>
+		<% end %>
+	<% end %>
+	<%= will_paginate @reviews %>
+	<br>
+</div>
 
 <script>
     $(document).ready(function(){

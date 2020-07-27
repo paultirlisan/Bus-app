@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 	resources :routes, only: [:new, :create, :edit, :update, :destroy]
 	resources :journeys, only: [:create, :destroy]
 	resources :companies, only: [:show] do
+		resources :reviews, only: [:create, :destroy]
 		member do
 			get 'careers'
 			get 'contact'

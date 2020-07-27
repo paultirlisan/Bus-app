@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_one :company, dependent: :destroy
   has_many :journeys, dependent: :destroy
-  accepts_nested_attributes_for :company, allow_destroy: true, reject_if: :all_blank
+  has_many :reviews, dependent: :destroy
+  accepts_nested_attributes_for :company, allow_destroy: true
 
   validates :name, presence: true, uniqueness: true
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i

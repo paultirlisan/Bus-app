@@ -21,3 +21,5 @@ require("channels")
 //= require bootstrap
 //= require ckeditor/init
 //= require moment
+//= require jquery.raty
+//= require ratyrate

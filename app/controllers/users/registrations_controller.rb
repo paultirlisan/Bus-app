@@ -11,27 +11,27 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # POST /resource
    def create
-=begin
       if params[:active]
-        temp_user = User.new(user_params)
-        temp_company = temp_user.build_company(description: params[:user][:company][:description], 
+        @user = User.new(user_params)
+        @company = @user.build_company(description: params[:user][:company][:description], 
                               phone: params[:user][:company][:phone],
                               headquarters: params[:user][:company][:headquarters],
                               careers_advertisement: params[:user][:company][:careers_advertisement])
-        if temp_user.valid? && !temp_company.valid?
-          redirect_to root_path
+        if !@company.valid?
+          @user.errors.add(:company, :invalid, message: " fields must be nonempty and the phone number valid")
+          render 'new'
           return
         end
       end
-=end
+
       super
-      user = User.find_by_email(params[:user][:email])
-      if !user.nil? && params[:active]
-        company = user.build_company(description: params[:user][:company][:description], 
+
+      if @user.valid? && params[:active]
+        @company = @user.build_company(description: params[:user][:company][:description], 
                               phone: params[:user][:company][:phone],
                               headquarters: params[:user][:company][:headquarters],
                               careers_advertisement: params[:user][:company][:careers_advertisement])
-        company.save
+        @company.save
       end
    end
 

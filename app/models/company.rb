@@ -2,6 +2,7 @@ class Company < ApplicationRecord
 	belongs_to :user
 	has_many :stations, dependent: :destroy
 	has_many :routes, dependent: :destroy
+	has_many :reviews, dependent: :destroy
 
 	validates :description, presence: true
 	validates :phone, presence: true, length: { minimum: 10, maximum: 15 },

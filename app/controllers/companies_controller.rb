@@ -7,6 +7,8 @@ class CompaniesController < ApplicationController
 
 	def show
 		@date = DateTime.now
+		@review = Review.new
+		@reviews = @company.reviews.order("id DESC").paginate(page: params[:page], per_page: 15)
 
 		if params[:commit] == "Search"
 			if !initialize_search_params

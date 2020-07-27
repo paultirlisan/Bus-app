@@ -11,11 +11,13 @@
 	<% end %>
 	<div class="container">
 		<%= will_paginate routes, renderer: BootstrapPagination::Rails  %>
+		<hr>
 	</div>
 <% else %>
 	<% if !routes.nil? # the case when the search took place but no route has been found %>
 		<div class="container">
 			<h2>No routes have been found.</h2>
+			<hr>
 	</div>
 	<% end %>
 <% end %>

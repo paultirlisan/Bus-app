@@ -55,7 +55,7 @@
         </div>
 
         <div class="field form-group">
-          <%= company_fields.check_box :active %>&nbsp
+          <%= company_fields.check_box :active, checked: resource.company.active %>&nbsp
           <%= label_tag :active, "Active" %>
         </div>
       <% end %>

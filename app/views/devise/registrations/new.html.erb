@@ -38,24 +38,30 @@
       <br>
       
       <%= f.fields_for f.object.build_company do |company_fields| %>
+        <% default_phone = params[:user].nil? ? "" : params[:user][:company][:phone] %>
         <div class="field form-group">
           <%= company_fields.label :phone %>
-          <%= company_fields.text_field :phone, class: "form-control" %>
+          <%= company_fields.text_field :phone, class: "form-control", value: default_phone %>
         </div>
 
+        <% default_headquarters = params[:user].nil? ? "" : params[:user][:company][:headquarters] %>
         <div class="field form-group">
           <%= company_fields.label :headquarters %>
-          <%= company_fields.text_field :headquarters, class: "form-control" %>
+          <%= company_fields.text_field :headquarters, class: "form-control", value: default_headquarters %>
         </div>
 
+        <% default_description = params[:user].nil? ? "" : params[:user][:company][:description] %>
         <div class="field form-group">
           <%= company_fields.label :description %>
-          <%= company_fields.cktext_area :description, class: "form-control" %>
+          <%= company_fields.cktext_area :description, class: "form-control", value: default_description %>
         </div>
 
+        <% default_careers_advertisement = params[:user].nil? ? "" : 
+                        params[:user][:company][:careers_advertisement] %>
         <div class="field form-group">
           <%= company_fields.label :careers_advertisement %>
-          <%= company_fields.cktext_area :careers_advertisement, class: "form-control" %>
+          <%= company_fields.cktext_area :careers_advertisement, class: "form-control", 
+                  value: default_careers_advertisement %>
         </div>
       <% end %>
     </div>
