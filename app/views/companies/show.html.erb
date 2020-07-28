@@ -9,41 +9,7 @@
 
 <br>
 
-<div class="container">
-	<div class="bg-primary pt-5 pb-5 text-center text-white">
-		<h2>Select your next journey</h2>
-	</div>
-	<div class="bg-warning">
-		<form method="get" action="<%= company_path @company %>">
-			<div class="row pt-3 pl-3 pr-3">
-				<% cities = @company.stations.select("DISTINCT city").map(&:city)  %>
-				<% cities.sort! %>
-
-				<div class="col-md form-group">
-					<%= select_tag :departure_city, options_for_select(cities, params[:departure_city]), 
-								class: "form-control", prompt: "Travel from" %>
-				</div>
-				<div class="col-md form-group">
-					<%= select_tag :arrival_city, options_for_select(cities, params[:arrival_city]), 
-								class: "form-control", prompt: "Travel to" %>
-				</div>
-				<div class="col-md form-group">
-					<input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" 
-								type="text" value="<%= @date.strftime('%m/%d/%Y') if !@date.nil? %>" />
-				</div>
-				<input type="hidden" name="company" value="<%= @company.user.name %>">
-				<div class="col-md form-group">
-					<%= select_tag :price, options_for_select(["0 - 10", "11 - 20", 
-								"21 - 50", "51 - 100", "Over 100"], params[:price]), class: "form-control",
-								prompt: "All prices" %>
-				</div>
-				<div class="col-md form-group">
-					<%= submit_tag "Search", class: "btn btn-primary btn-block" %>
-				</div>
-			</div>
-		</form>
-	</div>  
-</div>
+<%= render 'shared/search_routes', page_type: "Company" %>
 
 <br>
 <br>
@@ -82,7 +48,9 @@
 
 <div class="container">
 	<% if @reviews.count > 0 %>
-		<h2>Reviews (<%= @reviews.count %>)</h2>
+		<h2>Reviews</h2>
+		<hr>
+		<%= render 'shared/reviews_statistics', company: @company %>
 		<hr>
 		<% @reviews.each do |review| %>
 			<% if !review.nil? && review.valid? %>
@@ -93,17 +61,3 @@
 	<%= will_paginate @reviews %>
 	<br>
 </div>
-
-<script>
-    $(document).ready(function(){
-      var date_input=$('input[name="date"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options = {
-        format: 'mm/dd/yyyy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-      };
-      date_input.datepicker(options);
-    })
-</script>

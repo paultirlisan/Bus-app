@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="col">
-			<%= journey[0].route.company.user.name %>
+			<%= link_to "#{journey[0].route.company.user.name}", company_path(journey[0].route.company) %>
 		</div>
 
 		<div class="col">

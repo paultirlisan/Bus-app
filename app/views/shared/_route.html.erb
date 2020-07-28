@@ -1,7 +1,8 @@
 <div class="container pt-3 pb-3 bg-light">
   <div class="row pb-3">
     <div class="col-4 text-left"></div>
-    <div class="col-4 text-center"><%= route.company.user.name %></div>
+    <div class="col-4 text-center"><%= link_to "#{route.company.user.name}", 
+            company_path(route.company) %></div>
     <div class="col-4 text-right"><%= route.name %></div>
   </div>
   <div class="row pb-3">

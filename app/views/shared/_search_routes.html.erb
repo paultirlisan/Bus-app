@@ -1,0 +1,85 @@
+<div class="container">
+	<div class="bg-primary pt-5 pb-5 text-center text-white">
+		<h2>Select your next journey</h2>
+	</div>
+	<div class="bg-warning">
+		<% action_url = page_type == "Home" ? root_path : company_path(@company) %>
+		<form method="get" action="<%= action_url %>">
+			<div class="row pt-3 pl-3 pr-3">
+				<% if page_type == "Home" %>
+					<% active_companies_ids = Company.where(active: true).ids %>
+					<% cities = Station.where("company_id in (?)", 
+					   			active_companies_ids).select("DISTINCT city").map(&:city) %>
+				<% else %>
+					<% cities = @company.stations.select("DISTINCT city").map(&:city)  %>
+				<% end %>
+				<% cities.sort! %>
+
+				<div class="col-md form-group">
+					<%= select_tag :departure_city, options_for_select(cities, params[:departure_city]), 
+								class: "form-control", prompt: "Travel from", onchange: "departure_changed()" %>
+				</div>
+				<div class="col-md form-group">
+					<%= select_tag :arrival_city, options_for_select(cities, params[:arrival_city]), 
+								class: "form-control", prompt: "Travel to" %>
+				</div>
+				<div class="col-md form-group">
+					<input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" 
+								type="text" value="<%= @date.strftime('%m/%d/%Y') if !@date.nil? %>" />
+				</div>
+				<% if page_type == "Home" %>
+					<div class="col-md form-group">
+						<%= select_tag :company, 
+							options_for_select(Company.where(active: true).map { |company| company.user.name }, 
+									params[:company]), class: "form-control", prompt: "All companies" %>
+					</div>
+				<% else %>
+					<input type="hidden" name="company" value="<%= @company.user.name %>">
+				<% end %>
+				<div class="col-md form-group">
+					<%= select_tag :price, options_for_select(["0 - 10", "11 - 20", 
+								"21 - 50", "51 - 100", "Over 100"], params[:price]), class: "form-control",
+								prompt: "All prices" %>
+				</div>
+				<div class="col-md form-group">
+					<%= submit_tag "Search", class: "btn btn-primary btn-block" %>
+				</div>
+			</div>
+		</form>
+	</div>  
+</div>
+
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options = {
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+
+    function departure_changed() {
+    	var departure_city_select = document.getElementById("departure_city")
+    	var departure_city = departure_city_select.text
+    	var arrival_city_select = document.getElementById("arrival_city")
+    	if (departure_city != "") {
+    		// Empty the arrival city select
+    		while (arrival_city_select.firstChild) {
+    			arrival_city_select.removeChild(arrival_city_select.firstChild);
+		    }
+		    // Fill in the arrival city select
+    		for (var i = 0; i < departure_city_select.length; i++) {
+    			if (departure_city_select.selectedIndex != i) {
+    				var option = document.createElement("option");
+        		option.value = departure_city_select.options[i].value;
+        		option.text = departure_city_select.options[i].text;
+        		arrival_city_select.add(option)
+    			}
+    		}
+	    }
+    }
+</script>
